@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "CFM Core: Conscious Field Model Reference Implementation"
+version: 0.1.0
+date-released: 2025-12-04
+authors:
+  - name: "Vibrational Field Dynamics Institute"
+    email: "contact@vibrationalfielddynamics.org"
+repository-code: "https://github.com/cfm-project/cfm-core"
+license: MIT
+type: software
+keywords:
+  - dynamical-systems
+  - phi
+  - golden-ratio
+  - numeric-computation
+  - deterministic-simulation
+abstract: >-
+  CFM Core is a bounded deterministic numeric dynamical substrate
+  using phi/psi-based update equations. It provides reproducible
+  trajectories with guaranteed [0,1] bounded outputs, no NaN/Inf,
+  and full determinism for a given initial state and timestep sequence.
