@@ -20,8 +20,8 @@ A bounded deterministic numeric dynamical substrate using phi/psi-based update e
 
 ```bash
 # Clone the repository
-git clone https://github.com/cfm-project/cfm-core.git
-cd cfm-core
+git clone [https://github.com/cfm-project/cfm-core.git](https://github.com/vfd-org/constrained-field-model.git)
+cd constrained-field-model
 
 # Install in development mode
 pip install -e .
