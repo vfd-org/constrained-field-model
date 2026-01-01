@@ -1,182 +1,203 @@
-# Constrained Field Model (CFM)
+# CFM Core
 
-**Constrained Field Model (CFM)** is an open-source mathematical framework for simulating
-φ-scaled, constraint-driven field-state dynamics.
+A bounded deterministic numeric dynamical substrate using phi/psi-based update equations.
 
-This repository provides a **deterministic, non-semantic computational substrate**
-for studying how constrained fields evolve, stabilise, bifurcate, and interact
-under coupled dynamics.
+## What CFM Core IS
 
-> ⚠️ **Non-goal notice**  
-> This project does **not** implement:
-> - agency
-> - intelligence
-> - language
-> - cognition
-> - identity
-> - user-facing assistants or UIs  
->
-> CFM is a **mathematical / dynamical core only**.
+- A deterministic dynamical system producing bounded numeric outputs in [0, 1]
+- A mathematical model using phi (golden ratio), psi, and related constants
+- A reproducible substrate for field-theoretic numeric computation
+- Fully deterministic given initial state and timestep sequence
 
----
+## What CFM Core is NOT
 
-## Repository Scope
+- A cognitive system, "mind," or sentience model
+- A processor of semantic content or language
+- An identity holder, accessor, or generator
+- A control signal generator or decision maker
 
-CFM is designed to answer **one narrow class of questions**:
+## Installation
 
-> *How do constrained, multi-channel field states evolve over time under φ-scaled
-coupling, damping, and coherence constraints?*
+```bash
+# Clone the repository
+git clone https://github.com/cfm-project/cfm-core.git
+cd cfm-core
 
-It is intended as a **research substrate** that can later be embedded into
-higher-level systems — but makes **no claims** about emergent intelligence or consciousness.
-
----
-
-## Repository Structure
-
-```text
-cfm-open/
-├── cfm_consts.py            # Mathematical constants (φ, ψ, π)
-├── cfm_core_v0/             # Core v0: basic coupled oscillators
-├── cfm_core_v1/             # Core v1: slow / fast separation
-├── cfm_core_v2/             # Core v2: multi-channel architecture
-├── cfm_interface/           # Unified interface + adapters
-├── tools/                   # CLI-style analysis tools
-├── tests/                   # Test suite
-├── docs/                    # Formal specs and behavioral analyses
-├── README.md
-├── LICENSE
-└── pyproject.toml
-Each cfm_core_v* version represents a strictly bounded evolution model with
-well-defined state variables and update rules.
-
-Installation
-Clone the repository:
-
-bash
-Copy code
-git clone https://github.com/vfd-org/constrained-field-model.git
-cd constrained-field-model
-Install dependencies (Python ≥3.9 recommended):
-
-bash
-Copy code
+# Install in development mode
 pip install -e .
-If you prefer not to install in editable mode, you can run all tools directly
-via python tools/....
 
-Quick Start
-Run a local field evolution loop using Core v2:
+# Or install with dev dependencies
+pip install -e ".[dev]"
+```
 
-bash
-Copy code
-python tools/cfm_local_loop.py --steps 2000 --core-type cfm_v2
-This will:
+Requires Python 3.8+. No external dependencies for core functionality.
 
-initialise a constrained multi-channel field
+## Quick Start
 
-evolve it deterministically
+```python
+from cfm_interface import create_cfm_core
 
-emit state data for inspection
+# Create a CFM core (v2 by default)
+core = create_cfm_core("cfm_v2")
 
-Fingerprint Extraction
-Generate a structural fingerprint from an evolution trace:
+# Run simulation steps
+for step in range(100):
+    result = core.step(dt=0.1)
+    # All outputs guaranteed in [0, 1]
+    print(f"coherence={result['coherence']:.3f} stability={result['stability']:.3f}")
+```
 
-bash
-Copy code
-python tools/cfm_fingerprint.py --input out.json
-Fingerprints are structural descriptors, not semantic labels.
+## Core Versions
 
-Design Principles
-CFM is built around the following principles:
+| Version | Description | State Variables |
+|---------|-------------|-----------------|
+| v0 | Basic coupled oscillator | 4 (coherence, instability, energy, phase) |
+| v1 | Slow/fast variable separation | 8 (adds coherence_baseline, alignment_phase) |
+| v2 | Multi-channel architecture | 11 (five-tier timescale hierarchy) |
 
-Deterministic dynamics
-No stochastic sampling unless explicitly configured.
+All versions produce the same four output fields: `coherence`, `stability`, `intensity`, `alignment`.
 
-Constraint-first modeling
-Field behavior is shaped by boundary and coupling constraints.
+## CLI Tools
 
-No semantic assumptions
-States are numeric; interpretation is external.
+### Running Simulations
 
-Composable cores
-Each core version is standalone and testable.
+```bash
+# Run 2000 steps with v2 core, output to JSON
+cfm-loop --steps 2000 --core-type cfm_v2 --output-json out.json
 
-Failure is allowed
-Divergence, instability, and collapse are valid outcomes.
+# Or run directly
+python tools/cfm_local_loop.py --steps 2000 --output-json out.json
+```
 
-Documentation
-Formal specifications and behavioral analyses are provided in /docs, including:
+### Fingerprint Extraction
 
-Core v0–v2 mathematical definitions
+```bash
+# Extract behavioral fingerprint
+cfm-fingerprint --input out.json --output fingerprint.json
 
-Parameter maps
+# Compare two fingerprints for regression detection
+cfm-fingerprint --compare fp1.json fp2.json
+```
 
-Stability and bifurcation behavior
+### Reference Scenario Runs
 
-Tuning guidance
+```bash
+# Generate canonical reference run for regression testing
+python tools/cfm_reference_runs.py --scenario baseline_quiet --output-json baseline.json
 
-These documents describe what the system does, not what it “means”.
+# Available scenarios:
+#   baseline_quiet      2,000 steps, dt=0.1, no perturbations
+#   baseline_long       20,000 steps, dt=0.1, no perturbations
+#   mild_perturbation   5,000 steps, small bounded pulses
+#   high_variability    10,000 steps, dt jitter + perturbation pulses
+```
 
-Tests
-Run the test suite:
+### Log Analysis
 
-bash
-Copy code
-pytest
-All tests are deterministic and designed to validate:
+```bash
+# Analyze a run output
+python tools/cfm_log_analyzer.py --input out.json
 
-state evolution correctness
+# Analyze multiple runs with summary
+python tools/cfm_log_analyzer.py --input run1.json run2.json --summary
+```
 
-constraint enforcement
+## Reproducibility Workflow
 
-interface compatibility
+Generate deterministic reference runs for regression testing:
 
-License
-MIT License — see LICENSE.
+```bash
+# 1. Generate reference run with fixed seed
+python tools/cfm_reference_runs.py \
+    --scenario baseline_quiet \
+    --core-type cfm_v2 \
+    --seed 42 \
+    --output-json reference_baseline.json
 
-Citation
-If you use this work in research, please cite using CITATION.cff.
+# 2. Extract fingerprint
+cfm-fingerprint --input reference_baseline.json --output reference_fp.json
 
-Status
-This repository represents an initial open-source release of the CFM substrate.
+# 3. After code changes, regenerate and compare
+python tools/cfm_reference_runs.py \
+    --scenario baseline_quiet \
+    --core-type cfm_v2 \
+    --seed 42 \
+    --output-json new_baseline.json
 
-Future work (if any) will focus on:
+cfm-fingerprint --input new_baseline.json --output new_fp.json
+cfm-fingerprint --compare reference_fp.json new_fp.json
+```
 
-mathematical refinement
+Identical seeds produce identical trajectories. Any difference indicates behavioral change.
 
-stability analysis
+## Output Format
 
-interface generalisation
+All CFM cores produce a dictionary with these guaranteed fields:
 
-No roadmap for higher-level systems is implied.
+| Field | Type | Range | Description |
+|-------|------|-------|-------------|
+| `coherence` | float | [0, 1] | Field coherence level |
+| `stability` | float | [0, 1] | Stability indicator |
+| `intensity` | float | [0, 1] | Energy/activation level |
+| `alignment` | float | [0, 1] | Resonance/alignment indicator |
 
-yaml
-Copy code
+Additional metadata fields (e.g., `cfm_version`, `cfm_step`, `cfm_time`) may be included.
 
----
+## Safety Guarantees
 
-## Why this README works (important)
+All CFM cores guarantee:
 
-- It **does not promise the future**
-- It **cannot be read as “ARIA in disguise”**
-- It **sets expectations correctly**
-- It protects you from:
-  - hype backlash
-  - ontology arguments
-  - identity projection
-  - “where’s the AI?” noise
+- **Bounded outputs**: All values in [0, 1], always
+- **No NaN/Inf**: Safe arithmetic operations only
+- **Deterministic**: Same inputs produce identical outputs
+- **No identity content**: No identity fields or derivation
+- **No semantic processing**: Pure numeric dynamics
 
-This is exactly how **foundational substrates** should be published.
+## Running Tests
 
----
+```bash
+# Run all tests
+python -m pytest tests/ -v
 
-### If you want next steps
-I can:
-- sanity-check `pyproject.toml` script entries
-- tighten wording even further for academic audiences
-- write a **one-paragraph announcement** that won’t trigger UI expectations
-- help you decide whether to tag a `v0.1.0` release now or later
+# Or with unittest
+python -m unittest discover -s tests -p "test_*.py" -v
+```
 
-But for now:  
-**Yes — you can paste this README in as-is and publish safely.**
+## Project Structure
+
+```
+cfm-core/
+├── cfm_consts.py           # Mathematical constants (phi, psi, pi)
+├── cfm_core_v0/            # CFM Core v0 implementation
+├── cfm_core_v1/            # CFM Core v1 implementation
+├── cfm_core_v2/            # CFM Core v2 implementation
+├── cfm_interface/          # Unified interface layer
+│   ├── protocols.py        # CFMCoreProtocol definition
+│   ├── adapters.py         # CFMCoreAdapter
+│   └── factory.py          # Core factory function
+├── tools/                  # CLI tools
+│   ├── cfm_local_loop.py   # Simulation runner
+│   ├── cfm_fingerprint.py  # Fingerprint extraction
+│   ├── cfm_reference_runs.py  # Reference scenario generator
+│   └── cfm_log_analyzer.py # Run output analyzer
+├── tests/                  # Test suite
+└── docs/                   # Specifications and analysis
+```
+
+## Documentation
+
+See the `docs/` directory for detailed specifications:
+
+- CFM Core v0/v1/v2 specifications
+- Behavioral analysis documents
+- Parameter tuning guides
+
+## License
+
+MIT License - See [LICENSE](LICENSE) for details.
+
+## Contact
+
+Vibrational Field Dynamics Institute
+Email: contact@vibrationalfielddynamics.org
+Twitter/X: [@vfd_org](https://twitter.com/vfd_org)
